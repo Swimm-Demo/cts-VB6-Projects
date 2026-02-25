@@ -1,89 +1,108 @@
 ---
-title: Encrypting a file flow
+title: Encrypting and saving files flow
 ---
-This document describes the flow for encrypting a file and saving the result, with an option for <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> encoding. The process checks file existence and overwrite permissions, loads and encrypts the file data, and writes the encrypted output in the desired format.
+This document explains how files are securely transformed and saved in an encrypted format, supporting both binary and text-based outputs for flexible storage and sharing. The process verifies file permissions, encrypts the contents, and writes the result to a new file, optionally using a text encoding for easier transmission.
 
 ```mermaid
 flowchart TD
-  node1["Encrypting a File: Setup and Pre-checks"]:::HeadingStyle
-  click node1 goToHeading "Encrypting a File: Setup and Pre-checks"
-  node1 --> node2{"Does input file exist?"}
-  node2 -->|"Yes"| node3{"Is overwriting allowed?"}
-  node2 -->|"No"| node6["Fail: Cannot encrypt"]
-  node3 -->|"Yes"| node4["Encrypting Data Blocks and Preparing Words"]:::HeadingStyle
-  click node4 goToHeading "Encrypting Data Blocks and Preparing Words"
+  node1["Starting file encryption and cipher
+setup
+(Starting file encryption and cipher setup)"]:::HeadingStyle
+  click node1 goToHeading "Starting file encryption and cipher setup"
+  node1 --> node2{"Is input file valid?
+(Starting file encryption and cipher setup)"}:::HeadingStyle
+  click node2 goToHeading "Starting file encryption and cipher setup"
+  node2 -->|"Yes"| node3{"Can output file be created or
+overwritten?
+(Starting file encryption and cipher setup)"}:::HeadingStyle
+  click node3 goToHeading "Starting file encryption and cipher setup"
+  node2 -->|"No"| node6["Finalizing encrypted file output
+(Finalizing encrypted file output)"]:::HeadingStyle
+  click node6 goToHeading "Finalizing encrypted file output"
+  node3 -->|"Yes"| node4["Encrypting data blocks and extracting words"]:::HeadingStyle
+  click node4 goToHeading "Encrypting data blocks and extracting words"
   node3 -->|"No"| node6
-  node4 --> node5["Writing Encrypted Output"]:::HeadingStyle
-  click node5 goToHeading "Writing Encrypted Output"
-  node5 --> node7{"Base64 encoding option?"}
-  node7 -->|"Yes"| node8["Base64 Encoding Setup and Processing"]:::HeadingStyle
-  click node8 goToHeading "HotelManagementSystem/Modules/clsBlowfish.cls:20 Encoding Setup and Processing"
-  node7 -->|"No"| node5
-classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
+  node4 --> node5["Preparing output file for encrypted data"]:::HeadingStyle
+  click node5 goToHeading "Preparing output file for encrypted data"
+  node5 --> node6["Finalizing encrypted file output
+(Finalizing encrypted file output)"]:::HeadingStyle
+  click node6 goToHeading "Finalizing encrypted file output"
 
-%% Swimm:
-%% flowchart TD
-%%   node1["Encrypting a File: Setup and Pre-checks"]:::HeadingStyle
-%%   click node1 goToHeading "Encrypting a File: Setup and Pre-checks"
-%%   node1 --> node2{"Does input file exist?"}
-%%   node2 -->|"Yes"| node3{"Is overwriting allowed?"}
-%%   node2 -->|"No"| node6["Fail: Cannot encrypt"]
-%%   node3 -->|"Yes"| node4["Encrypting Data Blocks and Preparing Words"]:::HeadingStyle
-%%   click node4 goToHeading "Encrypting Data Blocks and Preparing Words"
-%%   node3 -->|"No"| node6
-%%   node4 --> node5["Writing Encrypted Output"]:::HeadingStyle
-%%   click node5 goToHeading "Writing Encrypted Output"
-%%   node5 --> node7{"<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> encoding option?"}
-%%   node7 -->|"Yes"| node8["<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> Encoding Setup and Processing"]:::HeadingStyle
-%%   click node8 goToHeading "<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> Encoding Setup and Processing"
-%%   node7 -->|"No"| node5
-%% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
+classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 ```
 
-# Encrypting a File: Setup and Pre-checks
+# Starting file encryption and cipher setup
 
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
-    node1["Start: Request to encrypt file"]
+    node1["Begin file encryption"]
     click node1 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1555:1556"
-    node1 --> node2{"Does input file exist?"}
+    node1 --> node2{"Is input file valid?"}
     click node2 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1557:1560"
-    node2 -->|"Yes"| node3{"Is output file present and overwrite allowed?"}
+    node2 -->|"Yes"| node3{"Can output file be created? (Overwrite
+allowed?)"}
     click node3 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1561:1564"
-    node2 -->|"No"| node5["Fail: Cannot encrypt"]
-    click node5 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1558:1563"
-    node3 -->|"Allowed"| node4["Encrypt file and optionally encode"]
-    click node4 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1565:1579"
-    node3 -->|"Not allowed"| node5
-    node4 --> node6["Success: Encrypted file created"]
-    click node6 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1581:1583"
+    node2 -->|"No"| node5["Fail: File not found or cannot be
+created"]
+    click node5 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1558:1559"
+    node3 -->|"Yes"| node4["Encrypting data blocks and extracting words"]
+    
+    node3 -->|"No"| node5
+    node4 --> node6{"Should output be Base64 encoded?"}
+    click node6 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1575:1576"
+    node6 -->|"Yes"| node7["Encoding encrypted bytes to Base64-like format"]
+    
+    node6 -->|"No"| node8["Save encrypted file"]
+    click node8 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1578:1578"
+    node7 --> node9["Success"]
+    click node9 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1581:1583"
+    node8 --> node9
+
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
+click node4 goToHeading "Encrypting data blocks and extracting words"
+node4:::HeadingStyle
+click node7 goToHeading "Encoding encrypted bytes to Base64-like format"
+node7:::HeadingStyle
 
 %% Swimm:
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
-%%     node1["Start: Request to encrypt file"]
+%%     node1["Begin file encryption"]
 %%     click node1 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1555:1556"
-%%     node1 --> node2{"Does input file exist?"}
+%%     node1 --> node2{"Is input file valid?"}
 %%     click node2 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1557:1560"
-%%     node2 -->|"Yes"| node3{"Is output file present and overwrite allowed?"}
+%%     node2 -->|"Yes"| node3{"Can output file be created? (Overwrite
+%% allowed?)"}
 %%     click node3 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1561:1564"
-%%     node2 -->|"No"| node5["Fail: Cannot encrypt"]
-%%     click node5 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1558:1563"
-%%     node3 -->|"Allowed"| node4["Encrypt file and optionally encode"]
-%%     click node4 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1565:1579"
-%%     node3 -->|"Not allowed"| node5
-%%     node4 --> node6["Success: Encrypted file created"]
-%%     click node6 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1581:1583"
+%%     node2 -->|"No"| node5["Fail: File not found or cannot be
+%% created"]
+%%     click node5 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1558:1559"
+%%     node3 -->|"Yes"| node4["Encrypting data blocks and extracting words"]
+%%     
+%%     node3 -->|"No"| node5
+%%     node4 --> node6{"Should output be <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> encoded?"}
+%%     click node6 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1575:1576"
+%%     node6 -->|"Yes"| node7["Encoding encrypted bytes to Base64-like format"]
+%%     
+%%     node6 -->|"No"| node8["Save encrypted file"]
+%%     click node8 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1578:1578"
+%%     node7 --> node9["Success"]
+%%     click node9 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1581:1583"
+%%     node8 --> node9
+%% 
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
+%% click node4 goToHeading "Encrypting data blocks and extracting words"
+%% node4:::HeadingStyle
+%% click node7 goToHeading "Encoding encrypted bytes to Base64-like format"
+%% node7:::HeadingStyle
 ```
 
 <SwmSnippet path="/HotelManagementSystem/Modules/clsBlowfish.cls" line="1555">
 
 ---
 
-In <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1555:4:4" line-data="Public Function EncryptFile(InFile As String, OutFile As String, Overwrite As Boolean, Optional Key As String, Optional OutputIn64 As Boolean) As Boolean">`EncryptFile`</SwmToken>, we kick things off and immediately call <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1556:1:1" line-data="    Class_Initialize">`Class_Initialize`</SwmToken>. This ensures the Blowfish cipher state is set up with the right constants before any file or key handling happens. Without this, the rest of the encryption logic would be working with uninitialized or invalid state.
+In <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1555:4:4" line-data="Public Function EncryptFile(InFile As String, OutFile As String, Overwrite As Boolean, Optional Key As String, Optional OutputIn64 As Boolean) As Boolean">`EncryptFile`</SwmToken>, we kick off the process by calling <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1556:1:1" line-data="    Class_Initialize">`Class_Initialize`</SwmToken> to reset the cipher state. This avoids any leftover state from previous runs and makes sure the encryption starts with a clean slate.
 
 ```apex
 Public Function EncryptFile(InFile As String, OutFile As String, Overwrite As Boolean, Optional Key As String, Optional OutputIn64 As Boolean) As Boolean
@@ -98,7 +117,7 @@ Public Function EncryptFile(InFile As String, OutFile As String, Overwrite As Bo
 
 ---
 
-<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="506:4:4" line-data="Private Sub Class_Initialize()">`Class_Initialize`</SwmToken> loads up the Blowfish P-array and S-boxes with the official constants. These hex values aren't random—they're straight from the algorithm spec and are needed for the cipher to function correctly. If you mess with them, you break the encryption.
+<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="506:4:4" line-data="Private Sub Class_Initialize()">`Class_Initialize`</SwmToken> sets up the Blowfish cipher's internal state by loading the P-array and S-boxes with a ton of predefined hex values. These are straight from the Blowfish spec and are needed for the cipher to work. The <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="508:1:1" line-data="  m_RunningCompiled = ((2147483647 + 1) &lt; 0)">`m_RunningCompiled`</SwmToken> flag just checks if we're running compiled or in the IDE—doesn't affect encryption.
 
 ```apex
 Private Sub Class_Initialize()
@@ -1157,7 +1176,7 @@ End Sub
 
 ---
 
-Back in <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1558:1:1" line-data="        EncryptFile = False">`EncryptFile`</SwmToken>, after initializing the cipher, we check if the input file exists. If not, we bail out. Then we check if the output file exists and if overwriting isn't allowed, we bail again. These checks avoid file-not-found errors and accidental overwrites.
+Back in <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1558:1:1" line-data="        EncryptFile = False">`EncryptFile`</SwmToken> after initializing the cipher, we check if the input file exists. If not, we bail out early. Then we check if the output file exists and if overwriting isn't allowed, we bail again. This prevents unnecessary work and accidental overwrites.
 
 ```apex
     If FileExist(InFile) = False Then
@@ -1175,7 +1194,7 @@ Back in <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1558
 
 ---
 
-<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1619:4:4" line-data="Private Function FileExist(FilePath As String) As Boolean">`FileExist`</SwmToken> just tries to get the file length. If it works, the file is there. If it errors, it's not. Simple as that.
+<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1619:4:4" line-data="Private Function FileExist(FilePath As String) As Boolean">`FileExist`</SwmToken> checks for a file by trying to get its length. If that works, the file's there. If not, it returns False—so it's a quick existence check.
 
 ```apex
 Private Function FileExist(FilePath As String) As Boolean
@@ -1197,7 +1216,7 @@ End Function
 
 ---
 
-After checking file existence, we load the input file into a byte array and call <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1571:3:3" line-data="    Call EncryptByte(Buffer(), Key)">`EncryptByte`</SwmToken>. The encryption happens in memory, so we need the whole file as a byte array before we can process it.
+After checking file existence, <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1562:1:1" line-data="        EncryptFile = False">`EncryptFile`</SwmToken> loads the input file into a byte array and then calls <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1571:3:3" line-data="    Call EncryptByte(Buffer(), Key)">`EncryptByte`</SwmToken> to encrypt the data in memory. This sets up the encrypted content for writing out later.
 
 ```apex
         EncryptFile = False
@@ -1216,13 +1235,13 @@ After checking file existence, we load the input file into a byte array and call
 
 </SwmSnippet>
 
-## Encrypting Data Blocks and Preparing Words
+## Encrypting data blocks and extracting words
 
 <SwmSnippet path="/HotelManagementSystem/Modules/clsBlowfish.cls" line="348">
 
 ---
 
-In <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="348:4:4" line-data="Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)">`EncryptByte`</SwmToken>, we prep the byte array (padding, random headers, etc.), then loop through it in 8-byte blocks. We call <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="361:3:3" line-data="        Call GetWord(LeftWord, byteArray(), Offset)">`GetWord`</SwmToken> to pull out 4-byte words from the byte array, since the block cipher logic works on those, not on individual bytes.
+In <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="348:4:4" line-data="Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)">`EncryptByte`</SwmToken>, we prep the byte array with padding and random data, then start processing it in 8-byte blocks. We use <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="361:3:3" line-data="        Call GetWord(LeftWord, byteArray(), Offset)">`GetWord`</SwmToken> to pull out two 4-byte words from each block for encryption.
 
 ```apex
 Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)
@@ -1250,7 +1269,7 @@ Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)
 
 ---
 
-<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="428:6:6" line-data="Private Static Sub GetWord(LongValue As Long, CryptBuffer() As Byte, Offset As Long)">`GetWord`</SwmToken> grabs 4 bytes from the buffer at the given offset, reverses their order, and packs them into a long. This is all about getting the byte order right for the encryption math.
+<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="428:6:6" line-data="Private Static Sub GetWord(LongValue As Long, CryptBuffer() As Byte, Offset As Long)">`GetWord`</SwmToken> grabs 4 bytes from the buffer at a given offset, reverses their order, and packs them into a Long. This keeps the block cipher's word format consistent regardless of system endianness.
 
 ```apex
 Private Static Sub GetWord(LongValue As Long, CryptBuffer() As Byte, Offset As Long)
@@ -1271,7 +1290,7 @@ End Sub
 
 ---
 
-After pulling out the words and XORing them with the previous cipher block, we call <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="365:3:3" line-data="        Call EncryptBlock(LeftWord, RightWord)">`EncryptBlock`</SwmToken>. That's where the real encryption happens for each 8-byte chunk.
+After pulling out the words, <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="348:4:4" line-data="Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)">`EncryptByte`</SwmToken> XORs them with the previous encrypted block and then calls <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="365:3:3" line-data="        Call EncryptBlock(LeftWord, RightWord)">`EncryptBlock`</SwmToken> to actually encrypt the pair. This is the core block cipher step.
 
 ```apex
         LeftWord = LeftWord Xor CipherLeft
@@ -1283,50 +1302,60 @@ After pulling out the words and XORing them with the previous cipher block, we c
 
 </SwmSnippet>
 
-### Encrypting Each Data Block
+### Encrypting individual blocks
 
-See <SwmLink doc-title="Encrypting a Data Block">[Encrypting a Data Block](/.swm/encrypting-a-data-block.46vyp4ry.sw.md)</SwmLink>
+See <SwmLink doc-title="Block Encryption Flow">[Block Encryption Flow](/.swm/block-encryption-flow.42hh48w2.sw.md)</SwmLink>
 
-### Storing Encrypted Words and Progress Updates
+### Writing encrypted words back to buffer
 
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
-    subgraph loop1["For each chunk of data"]
-        node1["Update buffer with encrypted data"]
-        click node1 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:366:367"
-        node1 --> node2{"Is Offset >= NextPercent?"}
-        click node2 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:370:374"
-        node2 -->|"Yes"| node3["Raise progress feedback (CurrPercent)"]
-        click node3 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:373:373"
-        node2 -->|"No"| node1
-        node3 --> node1
+    node1["Start encryption process"]
+    click node1 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:366:377"
+    
+    subgraph loop1["For each segment to encrypt"]
+        node1 --> node2["Update byte array with encrypted values"]
+        click node2 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:366:367"
+        node2 --> node3{"Is Offset >= NextPercent?"}
+        click node3 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:370:374"
+        node3 -->|"Yes"| node4["Update progress percentage (CurrPercent)"]
+        click node4 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:371:373"
+        node4 --> node5["Next segment"]
+        node3 -->|"No"| node5
+        click node5 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:375:375"
     end
-    loop1 --> node4{"Is CurrPercent <> 100?"}
-    click node4 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:376:376"
-    node4 -->|"Yes"| node5["Raise final progress feedback (100%)"]
-    click node5 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:376:376"
-    node4 -->|"No"| node6["End"]
+    node5 --> node6{"Is CurrPercent <> 100?"}
+    click node6 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:376:376"
+    node6 -->|"Yes"| node7["Report final progress (100%)"]
+    click node7 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:376:376"
+    node6 -->|"No"| node8["Encryption complete"]
+    click node8 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:377:377"
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
 %% Swimm:
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
-%%     subgraph loop1["For each chunk of data"]
-%%         node1["Update buffer with encrypted data"]
-%%         click node1 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:366:367"
-%%         node1 --> node2{"Is Offset >= <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="349:59:59" line-data="    Dim Offset As Long, OrigLen As Long, LeftWord As Long, RightWord As Long, CipherLen As Long, CipherLeft As Long, CipherRight As Long, CurrPercent As Long, NextPercent As Long">`NextPercent`</SwmToken>?"}
-%%         click node2 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:370:374"
-%%         node2 -->|"Yes"| node3["Raise progress feedback (<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="349:52:52" line-data="    Dim Offset As Long, OrigLen As Long, LeftWord As Long, RightWord As Long, CipherLen As Long, CipherLeft As Long, CipherRight As Long, CurrPercent As Long, NextPercent As Long">`CurrPercent`</SwmToken>)"]
-%%         click node3 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:373:373"
-%%         node2 -->|"No"| node1
-%%         node3 --> node1
+%%     node1["Start encryption process"]
+%%     click node1 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:366:377"
+%%     
+%%     subgraph loop1["For each segment to encrypt"]
+%%         node1 --> node2["Update byte array with encrypted values"]
+%%         click node2 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:366:367"
+%%         node2 --> node3{"Is Offset >= <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="349:59:59" line-data="    Dim Offset As Long, OrigLen As Long, LeftWord As Long, RightWord As Long, CipherLen As Long, CipherLeft As Long, CipherRight As Long, CurrPercent As Long, NextPercent As Long">`NextPercent`</SwmToken>?"}
+%%         click node3 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:370:374"
+%%         node3 -->|"Yes"| node4["Update progress percentage (<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="349:52:52" line-data="    Dim Offset As Long, OrigLen As Long, LeftWord As Long, RightWord As Long, CipherLen As Long, CipherLeft As Long, CipherRight As Long, CurrPercent As Long, NextPercent As Long">`CurrPercent`</SwmToken>)"]
+%%         click node4 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:371:373"
+%%         node4 --> node5["Next segment"]
+%%         node3 -->|"No"| node5
+%%         click node5 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:375:375"
 %%     end
-%%     loop1 --> node4{"Is <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="349:52:52" line-data="    Dim Offset As Long, OrigLen As Long, LeftWord As Long, RightWord As Long, CipherLen As Long, CipherLeft As Long, CipherRight As Long, CurrPercent As Long, NextPercent As Long">`CurrPercent`</SwmToken> <> 100?"}
-%%     click node4 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:376:376"
-%%     node4 -->|"Yes"| node5["Raise final progress feedback (100%)"]
-%%     click node5 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:376:376"
-%%     node4 -->|"No"| node6["End"]
+%%     node5 --> node6{"Is <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="349:52:52" line-data="    Dim Offset As Long, OrigLen As Long, LeftWord As Long, RightWord As Long, CipherLen As Long, CipherLeft As Long, CipherRight As Long, CurrPercent As Long, NextPercent As Long">`CurrPercent`</SwmToken> <> 100?"}
+%%     click node6 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:376:376"
+%%     node6 -->|"Yes"| node7["Report final progress (100%)"]
+%%     click node7 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:376:376"
+%%     node6 -->|"No"| node8["Encryption complete"]
+%%     click node8 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:377:377"
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 ```
 
@@ -1334,7 +1363,7 @@ classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
 ---
 
-After <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="365:3:3" line-data="        Call EncryptBlock(LeftWord, RightWord)">`EncryptBlock`</SwmToken>, we use <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="366:3:3" line-data="        Call PutWord(LeftWord, byteArray(), Offset)">`PutWord`</SwmToken> to write the encrypted words back into the byte array, making sure the byte order is right for the output.
+After <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="365:3:3" line-data="        Call EncryptBlock(LeftWord, RightWord)">`EncryptBlock`</SwmToken>, <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="348:4:4" line-data="Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)">`EncryptByte`</SwmToken> uses <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="366:3:3" line-data="        Call PutWord(LeftWord, byteArray(), Offset)">`PutWord`</SwmToken> to write the encrypted words back into the byte array at the right offset. This updates the buffer with the encrypted block.
 
 ```apex
         Call PutWord(LeftWord, byteArray(), Offset)
@@ -1349,7 +1378,7 @@ After <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="365:3:
 
 ---
 
-<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="436:6:6" line-data="Private Static Sub PutWord(LongValue As Long, CryptBuffer() As Byte, Offset As Long)">`PutWord`</SwmToken> takes the encrypted long and writes it back to the buffer in big-endian order. This keeps the output format consistent for later use.
+<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="436:6:6" line-data="Private Static Sub PutWord(LongValue As Long, CryptBuffer() As Byte, Offset As Long)">`PutWord`</SwmToken> takes a Long, splits it into bytes, and writes them back to the buffer in reverse order. This keeps the data in big-endian format, matching what the cipher expects.
 
 ```apex
 Private Static Sub PutWord(LongValue As Long, CryptBuffer() As Byte, Offset As Long)
@@ -1370,7 +1399,7 @@ End Sub
 
 ---
 
-After writing the encrypted words back, we update <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="368:1:1" line-data="        CipherLeft = LeftWord">`CipherLeft`</SwmToken> and <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="369:1:1" line-data="        CipherRight = RightWord">`CipherRight`</SwmToken> for chaining, and raise progress events. This wraps up the block processing in <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="348:4:4" line-data="Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)">`EncryptByte`</SwmToken>.
+After <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="366:3:3" line-data="        Call PutWord(LeftWord, byteArray(), Offset)">`PutWord`</SwmToken>, <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="348:4:4" line-data="Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)">`EncryptByte`</SwmToken> updates the chaining variables and raises progress events. Once all blocks are processed, the buffer is fully encrypted and ready for output.
 
 ```apex
         CipherLeft = LeftWord
@@ -1389,43 +1418,53 @@ End Sub
 
 </SwmSnippet>
 
-## Writing Encrypted Output
+## Preparing output file for encrypted data
 
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 flowchart TD
-    node1{"Does output file exist?"}
+    node1["Check if output file exists"]
     click node1 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1572:1572"
-    node1 -->|"Yes"| node2["Delete existing output file"]
+    node1 --> node2{"Does output file exist?"}
     click node2 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1572:1572"
-    node1 -->|"No"| node3["Open output file for writing"]
-    click node3 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1573:1574"
-    node2 --> node3
-    node3 --> node4{"Encode output in Base64?"}
-    click node4 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1575:1575"
-    node4 -->|"Yes"| node5["Write encrypted data as Base64"]
-    click node5 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1576:1576"
-    node4 -->|"No"| node6["Write encrypted data as binary"]
-    click node6 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1574:1574"
+    node2 -->|"Yes"| node3["Delete existing output file"]
+    click node3 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1572:1572"
+    node2 -->|"No"| node4["Prepare to write encrypted file"]
+    click node4 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1573:1574"
+    node3 --> node4
+    node4 --> node5{"Should output be encoded in 64-bit?"}
+    click node5 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1575:1575"
+    node5 -->|"OutputIn64 = True"| node6["Write encrypted data in 64-bit format"]
+    click node6 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1576:1576"
+    node5 -->|"OutputIn64 = False"| node7["Write encrypted data in standard format"]
+    click node7 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1576:1576"
+    node6 --> node8["Encryption complete"]
+    click node8 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1576:1576"
+    node7 --> node8
 
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
 %% Swimm:
 %% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
 %% flowchart TD
-%%     node1{"Does output file exist?"}
+%%     node1["Check if output file exists"]
 %%     click node1 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1572:1572"
-%%     node1 -->|"Yes"| node2["Delete existing output file"]
+%%     node1 --> node2{"Does output file exist?"}
 %%     click node2 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1572:1572"
-%%     node1 -->|"No"| node3["Open output file for writing"]
-%%     click node3 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1573:1574"
-%%     node2 --> node3
-%%     node3 --> node4{"Encode output in <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken>?"}
-%%     click node4 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1575:1575"
-%%     node4 -->|"Yes"| node5["Write encrypted data as <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken>"]
-%%     click node5 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1576:1576"
-%%     node4 -->|"No"| node6["Write encrypted data as binary"]
-%%     click node6 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1574:1574"
+%%     node2 -->|"Yes"| node3["Delete existing output file"]
+%%     click node3 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1572:1572"
+%%     node2 -->|"No"| node4["Prepare to write encrypted file"]
+%%     click node4 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1573:1574"
+%%     node3 --> node4
+%%     node4 --> node5{"Should output be encoded in 64-bit?"}
+%%     click node5 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1575:1575"
+%%     node5 -->|"<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1555:38:38" line-data="Public Function EncryptFile(InFile As String, OutFile As String, Overwrite As Boolean, Optional Key As String, Optional OutputIn64 As Boolean) As Boolean">`OutputIn64`</SwmToken> = True"| node6["Write encrypted data in 64-bit format"]
+%%     click node6 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1576:1576"
+%%     node5 -->|"<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1555:38:38" line-data="Public Function EncryptFile(InFile As String, OutFile As String, Overwrite As Boolean, Optional Key As String, Optional OutputIn64 As Boolean) As Boolean">`OutputIn64`</SwmToken> = False"| node7["Write encrypted data in standard format"]
+%%     click node7 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1576:1576"
+%%     node6 --> node8["Encryption complete"]
+%%     click node8 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1576:1576"
+%%     node7 --> node8
 %% 
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 ```
@@ -1434,7 +1473,7 @@ classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
 ---
 
-After <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="348:4:4" line-data="Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)">`EncryptByte`</SwmToken>, we check if the output file exists and delete it if it does. This avoids mixing old and new data when writing the encrypted output.
+After <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="348:4:4" line-data="Public Sub EncryptByte(byteArray() As Byte, Optional Key As String)">`EncryptByte`</SwmToken>, <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1555:4:4" line-data="Public Function EncryptFile(InFile As String, OutFile As String, Overwrite As Boolean, Optional Key As String, Optional OutputIn64 As Boolean) As Boolean">`EncryptFile`</SwmToken> checks if the output file exists and deletes it if so. This clears out any old data before writing the new encrypted content.
 
 ```apex
     If FileExist(OutFile) = True Then Kill OutFile
@@ -1448,7 +1487,7 @@ After <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="348:4:
 
 ---
 
-After making sure the output file is ready, if <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1575:3:3" line-data="        If OutputIn64 = True Then">`OutputIn64`</SwmToken> is set, we call <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1576:9:9" line-data="            Put #FileO, , EncodeArray64(Buffer())">`EncodeArray64`</SwmToken> to turn the encrypted bytes into a <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> string before writing. This is for cases where the output needs to be text-safe.
+After clearing the output file, <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1555:4:4" line-data="Public Function EncryptFile(InFile As String, OutFile As String, Overwrite As Boolean, Optional Key As String, Optional OutputIn64 As Boolean) As Boolean">`EncryptFile`</SwmToken> checks if <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1575:3:3" line-data="        If OutputIn64 = True Then">`OutputIn64`</SwmToken> is set. If so, it calls <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1576:9:9" line-data="            Put #FileO, , EncodeArray64(Buffer())">`EncodeArray64`</SwmToken> to convert the encrypted bytes to a Base64-like string before writing.
 
 ```apex
     FileO = FreeFile
@@ -1461,7 +1500,7 @@ After making sure the output file is ready, if <SwmToken path="HotelManagementSy
 
 </SwmSnippet>
 
-## <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> Encoding Setup and Processing
+## Encoding encrypted bytes to Base64-like format
 
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
@@ -1470,24 +1509,32 @@ flowchart TD
     click node1 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:244:244"
     node1 -->|"No"| node2["Initialize Base64 table"]
     click node2 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:56:185"
-    node1 -->|"Yes"| node3["Begin encoding input bytes"]
+    node1 -->|"Yes"| node3["Prepare output buffer"]
     node2 --> node3
-    
-    subgraph loop1["For each group of 3 bytes in input"]
-      node3 --> node4["Convert 3 bytes to 4 Base64 characters"]
+    click node3 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:252:259"
+
+    subgraph loop1["For each 3-byte chunk in input"]
+      node3 --> node4["Encode chunk to Base64 characters"]
       click node4 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:260:266"
     end
-    node4 --> node5{"Does encoded output fit within maximum line length (k_lMaxBytesPerLine)?"}
-    click node5 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:288:312"
-    node5 -->|"Yes"| node6["Return encoded string"]
-    click node6 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:289:290"
-    node5 -->|"No"| node7["Split output into lines with line breaks"]
-    click node7 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:291:312"
-    subgraph loop2["For each line in encoded output"]
-      node7 --> node8["Add line break"]
-      click node8 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:301:307"
+    node4 --> node5["Handle remaining bytes (add padding if
+needed)"]
+    click node5 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:268:284"
+    node5 --> node6{"Is encoded output within max line
+length?"}
+    click node6 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:288:312"
+    node6 -->|"Yes"| node7["Return encoded string"]
+    click node7 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:289:290"
+    node6 -->|"No"| node8["Insert line breaks"]
+    click node8 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:291:311"
+
+    subgraph loop2["For each line in output"]
+      node8 --> node9["Copy line and add line break"]
+      click node9 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:301:307"
     end
-    node8 --> node6
+    node9 --> node10["Return encoded string"]
+    click node10 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:311:311"
+
 classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
 %% Swimm:
@@ -1497,24 +1544,32 @@ classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 %%     click node1 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:244:244"
 %%     node1 -->|"No"| node2["Initialize <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> table"]
 %%     click node2 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:56:185"
-%%     node1 -->|"Yes"| node3["Begin encoding input bytes"]
+%%     node1 -->|"Yes"| node3["Prepare output buffer"]
 %%     node2 --> node3
-%%     
-%%     subgraph loop1["For each group of 3 bytes in input"]
-%%       node3 --> node4["Convert 3 bytes to 4 <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> characters"]
+%%     click node3 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:252:259"
+%% 
+%%     subgraph loop1["For each 3-byte chunk in input"]
+%%       node3 --> node4["Encode chunk to <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> characters"]
 %%       click node4 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:260:266"
 %%     end
-%%     node4 --> node5{"Does encoded output fit within maximum line length (<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="288:7:7" line-data="    If lWorkspaceCounter &lt;= k_lMaxBytesPerLine Then">`k_lMaxBytesPerLine`</SwmToken>)?"}
-%%     click node5 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:288:312"
-%%     node5 -->|"Yes"| node6["Return encoded string"]
-%%     click node6 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:289:290"
-%%     node5 -->|"No"| node7["Split output into lines with line breaks"]
-%%     click node7 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:291:312"
-%%     subgraph loop2["For each line in encoded output"]
-%%       node7 --> node8["Add line break"]
-%%       click node8 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:301:307"
+%%     node4 --> node5["Handle remaining bytes (add padding if
+%% needed)"]
+%%     click node5 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:268:284"
+%%     node5 --> node6{"Is encoded output within max line
+%% length?"}
+%%     click node6 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:288:312"
+%%     node6 -->|"Yes"| node7["Return encoded string"]
+%%     click node7 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:289:290"
+%%     node6 -->|"No"| node8["Insert line breaks"]
+%%     click node8 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:291:311"
+%% 
+%%     subgraph loop2["For each line in output"]
+%%       node8 --> node9["Copy line and add line break"]
+%%       click node9 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:301:307"
 %%     end
-%%     node8 --> node6
+%%     node9 --> node10["Return encoded string"]
+%%     click node10 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:311:311"
+%% 
 %% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 ```
 
@@ -1522,7 +1577,7 @@ classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
 
 ---
 
-In <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="241:4:4" line-data="Public Function EncodeArray64(ByRef bytInput() As Byte) As String">`EncodeArray64`</SwmToken>, we check if the encoding tables are set up. If not, we call <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="244:14:14" line-data="    If m_bytReverseIndex(47) &lt;&gt; 63 Then Initialize64">`Initialize64`</SwmToken> to make sure the <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> mapping is ready before processing the byte array.
+In <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="241:4:4" line-data="Public Function EncodeArray64(ByRef bytInput() As Byte) As String">`EncodeArray64`</SwmToken>, we check if the reverse index array is set up. If not, we call <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="244:14:14" line-data="    If m_bytReverseIndex(47) &lt;&gt; 63 Then Initialize64">`Initialize64`</SwmToken> to make sure the <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> mapping is ready before encoding.
 
 ```apex
 Public Function EncodeArray64(ByRef bytInput() As Byte) As String
@@ -1539,7 +1594,7 @@ Public Function EncodeArray64(ByRef bytInput() As Byte) As String
 
 ---
 
-<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="56:4:4" line-data="Private Sub Initialize64()">`Initialize64`</SwmToken> fills the index array with the <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> character set and the reverse index for decoding. Both are needed so we can encode and decode efficiently.
+<SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="56:4:4" line-data="Private Sub Initialize64()">`Initialize64`</SwmToken> sets up the <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> character mapping arrays. One maps indices to ASCII chars, the other maps ASCII chars back to indices. This is needed for both encoding and decoding.
 
 ```apex
 Private Sub Initialize64()
@@ -1682,7 +1737,7 @@ End Sub
 
 ---
 
-After setting up the tables, <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="289:1:1" line-data="        EncodeArray64 = Left$(bytWorkspace, InStr(1, bytWorkspace, Chr$(0)) - 1)">`EncodeArray64`</SwmToken> loops through the input in 3-byte chunks, encodes them, handles padding, and adds line breaks if needed. The result is a <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="20:15:15" line-data="&#39; Standard Blowfish implementation with file support, Base64 conversion,">`Base64`</SwmToken> string ready for output.
+After <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="56:4:4" line-data="Private Sub Initialize64()">`Initialize64`</SwmToken>, <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="289:1:1" line-data="        EncodeArray64 = Left$(bytWorkspace, InStr(1, bytWorkspace, Chr$(0)) - 1)">`EncodeArray64`</SwmToken> processes the input bytes in chunks, encodes them using the mapping arrays, handles padding, and adds line breaks if needed. The result is a Base64-like string ready for output.
 
 ```apex
     Dim bytWorkspace() As Byte, bytResult() As Byte
@@ -1765,13 +1820,48 @@ End Function
 
 </SwmSnippet>
 
-## Finalizing Output and Cleanup
+## Finalizing encrypted file output
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
+flowchart TD
+    node1["Encrypt and write file"]
+    click node1 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1577:1580"
+    node1 --> node2{"Was encryption and writing successful?"}
+    click node2 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1581:1581"
+    node2 -->|"Yes"| node3["Return success"]
+    node2 -->|"No"| node4["Return failure"]
+    node3 --> node5["Clear sensitive data"]
+    node4 --> node5
+    click node3 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1581:1582"
+    click node4 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1587:1587"
+    click node5 openCode "HotelManagementSystem/Modules/clsBlowfish.cls:1582:1582"
+
+classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
+
+%% Swimm:
+%% %%{init: {"flowchart": {"defaultRenderer": "elk"}} }%%
+%% flowchart TD
+%%     node1["Encrypt and write file"]
+%%     click node1 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1577:1580"
+%%     node1 --> node2{"Was encryption and writing successful?"}
+%%     click node2 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1581:1581"
+%%     node2 -->|"Yes"| node3["Return success"]
+%%     node2 -->|"No"| node4["Return failure"]
+%%     node3 --> node5["Clear sensitive data"]
+%%     node4 --> node5
+%%     click node3 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1581:1582"
+%%     click node4 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1587:1587"
+%%     click node5 openCode "<SwmPath>[HotelManagementSystem/Modules/clsBlowfish.cls](HotelManagementSystem/Modules/clsBlowfish.cls)</SwmPath>:1582:1582"
+%% 
+%% classDef HeadingStyle fill:#777777,stroke:#333,stroke-width:2px;
+```
 
 <SwmSnippet path="/HotelManagementSystem/Modules/clsBlowfish.cls" line="1577">
 
 ---
 
-After writing the (possibly Base64-encoded) output, we clear the Buffer and sensitive strings, then return True. If anything fails, we clean up and return False. Keeps things tidy and avoids leaking secrets.
+After <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="241:4:4" line-data="Public Function EncodeArray64(ByRef bytInput() As Byte) As String">`EncodeArray64`</SwmToken>, <SwmToken path="HotelManagementSystem/Modules/clsBlowfish.cls" pos="1581:1:1" line-data="    EncryptFile = True">`EncryptFile`</SwmToken> writes the output (either encoded or raw bytes), closes the file, and cleans up by erasing the buffer and resetting variables. If anything fails, it does the same cleanup and returns False.
 
 ```apex
         Else
